@@ -1,3 +1,17 @@
+:root {
+  --button-bg: #3367d6;
+  --button-hover: #2850a7;
+  --success-color: #4caf50;
+  --error-color: #f44336;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --button-bg: #4285f4;
+    --button-hover: #5c9fff;
+  }
+}
+
 body {
   width: 200px;
   padding: 16px;
@@ -9,26 +23,38 @@ body {
 button {
   width: 100%;
   padding: 12px 24px;
-  background-color: #3367d6;
+  background-color: var(--button-bg);
   color: white;
   border: none;
   border-radius: 8px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  outline: none;
 }
 
 button:hover {
-  background-color: #2850a7;
+  background-color: var(--button-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 .success {
-  background-color: #4caf50 !important;
+  background-color: var(--success-color) !important;
 }
 
 .transitioning {
-  transition: background-color 2s ease;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.error {
+  background-color: var(--error-color) !important;
 }
