@@ -25,6 +25,10 @@ button:hover {
   background-color: #2850a7;
 }
 
-button:active {
-  transform: scale(0.98);
+.success {
+  background-color: #4caf50 !important;
+}
+
+.transitioning {
+  transition: background-color 2s ease;
 }

@@ -14,6 +14,15 @@ document.getElementById("copyButton").addEventListener("click", () => {
 
         if (response?.success) {
           navigator.clipboard.writeText(response.text);
+          const button = document.getElementById("copyButton");
+          button.classList.add("success");
+          setTimeout(() => {
+            button.classList.add("transitioning");
+            button.classList.remove("success");
+            setTimeout(() => {
+              button.classList.remove("transitioning");
+            }, 2000);
+          }, 100);
         }
       }
     );
