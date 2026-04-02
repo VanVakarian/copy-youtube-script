@@ -1,5 +1,4 @@
-const animateButton = (className) => {
-  const button = document.getElementById("copyButton");
+const animateButton = (button, className) => {
   button.classList.add(className);
   setTimeout(() => {
     button.classList.add("transitioning");
@@ -8,20 +7,37 @@ const animateButton = (className) => {
   }, 100);
 };
 
-document.getElementById("copyButton").addEventListener("click", () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const tab = tabs?.[0];
-    if (!tab?.id || !tab.url?.includes("youtube.com")) return;
+const copyTranscript = (buttonId, includeTimestamps) => {
+  const button = document.getElementById(buttonId);
 
-    chrome.tabs.sendMessage(tab.id, { action: "findAndCopy" }, (response) => {
-      if (chrome.runtime.lastError) return;
+  button.addEventListener("click", () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs?.[0];
+      if (!tab?.id || !tab.url?.includes("youtube.com")) return;
 
-      if (response?.success) {
-        navigator.clipboard.writeText(response.text);
-        animateButton("success");
-      } else {
-        animateButton("error");
-      }
+      chrome.tabs.sendMessage(
+        tab.id,
+        { action: "findAndCopy", includeTimestamps },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            animateButton(button, "error");
+            return;
+          }
+
+          if (!response?.success) {
+            animateButton(button, "error");
+            return;
+          }
+
+          navigator.clipboard
+            .writeText(response.text)
+            .then(() => animateButton(button, "success"))
+            .catch(() => animateButton(button, "error"));
+        },
+      );
     });
   });
-});
+};
+
+copyTranscript("copyTextButton", false);
+copyTranscript("copyTimestampsButton", true);
